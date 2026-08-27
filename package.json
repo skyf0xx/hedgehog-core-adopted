@@ -1,0 +1,31 @@
+{
+  "name": "@skyf0xx/hedgehog-core-adopted",
+  "version": "1.0.0",
+  "description": "Hedgehog's adopted core: brings Hedgehog's discipline to an existing repo without bootstrapping a workspace, scoping the build graph to new change only.",
+  "type": "module",
+  "scripts": {
+    "release": "npm version patch -m \"chore: bump version to %s\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skyf0xx/hedgehog-core-adopted.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "agents",
+    "skills",
+    "CLAUDE.core.md",
+    "hedgehog-core.yaml"
+  ],
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "keywords": [
+    "hedgehog-core",
+    "hedgehog",
+    "claude-code"
+  ],
+  "license": "MIT"
+}
