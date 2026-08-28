@@ -74,7 +74,12 @@ parsing and typing, and the layer after it consumes the result.
   from the build graph, not from your file's comments.
 - Match the conventions already in the repo: start from `adoption.md`'s
   "Repo shape" section, then confirm against the actual files nearby —
-  the section is a snapshot, the files are current.
+  the section is a snapshot, the files are current. That section's
+  observed `pattern` is calibration, not a rule to enforce: `none` means
+  no dependency direction to respect either way; `layered`/`hexagonal`
+  means new code in the layer you're building should keep pointing the
+  direction already observed, not introduce a new one — never a reason
+  to restructure what's already there.
 
 ## Workflow
 
