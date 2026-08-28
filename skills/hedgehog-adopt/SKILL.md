@@ -109,6 +109,23 @@ Before proposing anything, read enough of the repo to answer:
   This becomes `adoption.md`'s "Repo shape" section (Step 4) — calibration
   for how new code gets written, not an architecture model.
 
+  **Also observe the repo's `pattern`**, from the same evidence, never a
+  separate read: a workspace manifest's declared package graph (already
+  opened above for seam candidates) is the strongest available signal —
+  a one-way dependency direction toward a package nothing depends
+  outward from is `hexagonal`; a graph that's just sequential, ordered
+  stages with no domain/adapter shape is `layered`. **`none` unless the
+  structure makes it unambiguous** — the bar is a declared package
+  graph or an equally direct signal, not a directory named `domain` or a
+  vibe. When in doubt, `none`: it costs nothing, checks nothing, and is
+  honest. Never a recommendation — this records what the repo's
+  structure already is, never what it should become, the same stance
+  the rest of this step takes. `vertical-slice` is not a candidate here
+  regardless of what's observed — this core's chain never carries
+  `{module}` (Step 3), so that value has nothing to attach to; a
+  module-per-package repo still reads as `hexagonal`, `layered`, or
+  `none` from this evidence, same as any other.
+
 This step is entirely read-only. Never write, edit, or run anything that
 mutates the working tree here — no `npm install`, no formatter, nothing.
 
@@ -172,6 +189,29 @@ Each layer's `commit` uses the repo's own conventional-commit style if it
 has one (read a handful of recent commit subjects to tell), or standard
 Conventional Commits otherwise.
 
+**Write Step 1's observed `pattern` onto the generated `core.yaml`.**
+`vertical-slice` never applies here — this chain never carries
+`{module}` (above), and `vertical-slice` requires a module axis by
+construction, so that value is simply unreachable on this core.
+
+A linear, no-branching chain — which is the only shape this step ever
+produces — conformance-checks clean under both `layered` and
+`hexagonal` alike (confirmed directly against `validateCore`: a strict
+sequence trivially satisfies hexagonal's direction check too, since
+there is nothing to branch). `validateCore` will not catch a wrong
+choice between the two here, so it is not the backstop — Step 1's
+"unambiguous evidence" bar is. Declare only what the evidence actually
+showed (`hexagonal` needs the specific domain/adapter package-graph
+signal, not just "the layers happen to be in a line"; a plain
+sequential dependency short of that is `layered`, or `none` if even
+that is not clean). **The chain is not to be reshaped to satisfy a
+declaration** — if Step 1's evidence for a value doesn't hold once the
+actual chain is in front of you, downgrade the declaration (toward
+`layered`, then `none`) and say why in `adoption.md`'s rationale rather
+than forcing it. The chain expresses change order; the pattern
+describes the repo — where they'd disagree, the chain wins and the
+declaration yields.
+
 ## Step 4 — write `.hedgehog/adoption.md`
 
 The rationale, same stance as `core-design.md` on an authored core: what
@@ -189,6 +229,19 @@ plainly as a snapshot — what the repo looked like when read, not a
 live model — and say how to refresh it: re-run this skill (see "Adding
 the first (or next) change-work" below), never a hand edit.
 
+Include the observed `pattern` in this same section, stated as a fact
+with its evidence, never a suggestion — *"No enforced dependency
+direction observed (`pattern: none`) — `packages/` declares no
+dependency graph and imports run both ways between `core/` and
+`api/`."*, not *"this repo would benefit from…"*. If Step 3 downgraded
+the declared value from what Step 1 first noted (say, `hexagonal`'s
+evidence didn't fully hold once the actual chain was in view), say that
+here too, in the same factual register: what was observed, and why the
+declared `core.yaml` value ended up more conservative. This section is
+the one part of `adoption.md` a later run may refresh — the pattern
+observation refreshes with it, for the same reason the rest of the
+section does: a repo's shape changes as it's built on.
+
 Only this section is refreshable. Everything else in `adoption.md` — the
 commands, the layer rationale, what was left out — is locked the same as
 `core.yaml`, written once at Step 5 and changed only by the Correction
@@ -203,6 +256,11 @@ Protocol path described there.
   command, its commit message.
 - The tail `join` layer explicitly, and what it catches that the earlier
   layers don't.
+- The observed `pattern`, framed as an observation, not a judgment —
+  *"Observed architecture: none — this repo has no enforced dependency
+  direction. Hedgehog records this as a fact about the repo; it does
+  not change it."* When the declared value is `layered` or `hexagonal`,
+  state the evidence in the same line rather than the bare word.
 - Plainly, in these words or equivalent: *"This adds Hedgehog's
   discipline to how change lands on this repo from here forward. It
   never touches your existing code and never converts your stack — only
