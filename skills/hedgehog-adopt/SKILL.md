@@ -268,17 +268,47 @@ already there.
 
 ## Adding the first (or next) change-work
 
-Before adding an intent, judge the request the same way `planner`'s
-Phase 0 judges which core fits: a clear, bounded ask ("fix the auth
-timeout bug") goes straight to `hedgehog intent add` below. A large or
-under-specified one ("add billing," "support multi-tenancy") gets
-`hedgehog-adopt-elicit` first — a short, targeted clarifying pass on
-what's in scope, what's explicitly out, and any constraints the user
-already knows — not `hedgehog-planning-intake`'s BMAD shelf (that
-shelf's product-driver questions don't fit a change to a repo that
-already exists, whatever the change's size). Fold the answers directly
-into the intent's own `--goal`/`--outcome` text; nothing new gets archived or
-locked.
+Before adding an intent, size the request against stated conditions
+instead of a feel for "big" or "small." The fast path — straight to
+`hedgehog intent add` below — applies only when **all** of these hold:
+
+- The ask names its own acceptance condition — you can state what "done"
+  looks like without guessing.
+- It fits inside one layer of the locked chain — no new seam, no work
+  spanning more than one layer's scope.
+- The `verify` command that would prove it is already one of this
+  repo's own, already sitting in `.hedgehog/core.yaml` — nothing new to
+  wire up.
+- It touches no security, auth, migration, or data-loss surface.
+
+Failing even one of these gets `hedgehog-adopt-elicit` first — a short,
+targeted clarifying pass on what's in scope, what's explicitly out, and
+any constraints the user already knows — not `hedgehog-planning-intake`'s
+BMAD shelf (that shelf's product-driver questions don't fit a change to a
+repo that already exists, whatever the change's size). Fold the answers
+directly into the intent's own `--goal`/`--outcome` text; nothing new
+gets archived or locked.
+
+**Security-sensitive work never takes the fast path**, however small or
+well-scoped it looks: anything touching auth, permissions, migrations, or
+data deletion goes through elicitation unconditionally.
+
+**State which path was taken, and why, in one line, before proceeding**
+— e.g. "fast path: single-layer log-format fix, verify is the repo's
+existing lint command" or "elicitation: touches the auth session table."
+The cost of getting this call wrong is asymmetric: routing a small change
+through elicitation is friction the user notices immediately, while
+routing a large one straight to `intent add` produces an under-specified
+intent whose cost surfaces layers later — stating the call out loud
+makes a wrong one visible immediately instead of at the next layer.
+
+*The bar above and the requirement to state the call out loud are
+adapted from [twilson63/lfg](https://github.com/twilson63/lfg)'s
+"Triage: when to use the full loop" (MIT-licensed) — stated thresholds
+beat a vibe, and declaring the path taken catches a wrong call early.
+The rest of `lfg` (HTML progress pages, canvas diagrams, LLM-as-judge
+scoring) is deliberately not carried over: the build graph, `hedgehog
+verify`'s exit code, and the task packet already cover that ground.*
 
 Once `core.yaml` is locked and any elicitation above is done, add intents
 the same way any other core does — `hedgehog intent add --id <id> --goal
