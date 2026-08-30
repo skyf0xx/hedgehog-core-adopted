@@ -13,7 +13,7 @@ choosing anything.
 ## Contents
 
 - `agents/layer-eng.md` — builds each layer of an adopted core's change
-  chain, one `hedgehog next` packet at a time, gated by `hedgehog
+  chain, one `hedgehog claim`ed packet at a time, gated by `hedgehog
   verify`.
 - `skills/hedgehog-adopt` — brings Hedgehog's discipline to an existing
   repo: reads the repo read-only, proposes a linear-chain
@@ -24,9 +24,10 @@ choosing anything.
   under-specified change request on an already-adopted repo, run by
   `hedgehog-adopt` before adding that intent.
 - `skills/hedgehog-authored-loop` — the operating loop for every unit of
-  change-work on an adopted core: one layer per `hedgehog next` packet
-  via `layer-eng`, the Correction Protocol, and the per-change Stop
-  Condition, all driven from `.hedgehog/core.yaml`.
+  change-work on an adopted core: one layer per `hedgehog claim`ed
+  packet via `layer-eng` (`hedgehog next` previews it read-only first),
+  the Correction Protocol, and the per-change Stop Condition, all driven
+  from `.hedgehog/core.yaml`.
 - `CLAUDE.core.md` — fills a Hedgehog project's root `CLAUDE.md`
   `{{CORE_SECTION}}` placeholder for a repo Hedgehog adopted.
 - `hedgehog-core.yaml` — this package's manifest: name, the selection

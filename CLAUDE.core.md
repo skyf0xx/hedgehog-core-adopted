@@ -40,8 +40,9 @@ they apply here unchanged.
 
 ### The skills — invoke these, don't improvise
 
-- **`hedgehog-authored-loop`** — every unit of change: `hedgehog next`
-  emits the packet for one ready layer, `layer-eng` builds it, `hedgehog
+- **`hedgehog-authored-loop`** — every unit of change: `hedgehog claim`
+  reserves the packet for one ready layer (`hedgehog next` previews it
+  read-only, without reserving), `layer-eng` builds it, `hedgehog
   verify` gates and commits it. Also holds the Correction Protocol and
   this core's Stop Condition (per-change here, not whole-graph — see
   below).
@@ -57,9 +58,9 @@ they apply here unchanged.
 - **`planner`** — routes new change-work here via `hedgehog intent add`
   once this repo is under adoption; does not re-run intake or re-decide
   the core.
-- **`layer-eng`** — builds one layer per `hedgehog next` packet, working
-  from the packet's ALLOWED SCOPE. Reports the work done; never commits
-  it.
+- **`layer-eng`** — builds one layer per `hedgehog claim`ed packet,
+  working from the packet's ALLOWED SCOPE. Reports the work done; never
+  commits it.
 - **`reviewer`** — judges only the unit under change, never pre-existing
   code the current work didn't touch. A day-one dump of legacy findings
   is out of scope by design — see `adoption.md`.
