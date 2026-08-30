@@ -326,9 +326,18 @@ already there.
 
 ## Adding the first (or next) change-work
 
-Before adding an intent, size the request against stated conditions
-instead of a feel for "big" or "small." The fast path — straight to
-`hedgehog intent add` below — applies only when **all** of these hold:
+`tweaker`, keyed off `hedgehog-daily`, is what routes a request here in
+the first place: that gate reads `.hedgehog/core.yaml` and sends anything
+that reaches more than one layer or introduces something that doesn't yet
+exist to this section, while a same-layer edit to something already
+there stops at its own tweak exit and never reaches this skill at all. A
+request already past that gate is change-work by `hedgehog-daily`'s own
+condition — this section's fast-path/elicitation bar is a second,
+narrower decision made only once that's settled: not whether the work is
+big enough to enter the graph, but whether the intent can be written now
+or needs a clarifying pass first. Size against that bar before adding an
+intent instead of a feel for "big" or "small." The fast path — straight
+to `hedgehog intent add` below — applies only when **all** of these hold:
 
 - The ask names its own acceptance condition — you can state what "done"
   looks like without guessing.

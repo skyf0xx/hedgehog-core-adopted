@@ -185,8 +185,9 @@ Two hold regardless of stack:
 ## Friction log
 
 Same mechanic as `hedgehog-loop`'s Friction log — log real friction via
-`hedgehog friction add "<note>" [--task <task-id>]`, `tweaker` reads it at
-the Stop Condition.
+`hedgehog friction add "<note>" [--task <task-id>]`. `tweaker`'s job 2
+wakes on the log itself, not a build boundary: once three or more rows
+have accumulated since the last `reviewed:` marker.
 
 ## Correction Protocol
 
