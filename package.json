@@ -1,6 +1,6 @@
 {
   "name": "@skyf0xx/hedgehog-core-adopted",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Hedgehog's adopted core: brings Hedgehog's discipline to an existing repo without bootstrapping a workspace, scoping the build graph to new change only.",
   "type": "module",
   "scripts": {
