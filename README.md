@@ -1,75 +1,53 @@
-# @skyf0xx/hedgehog-core-adopted
+# Hedgehog Adopted Core ⭐
 
-Hedgehog's adopted core: brings Hedgehog's discipline to a repo that
-already exists, without bootstrapping a workspace at all. The build
-graph covers new change only — pre-existing code is context to read and
-respect, never a node in the graph.
+### Discipline for the Codebase You Already Have
 
-Unlike other cores, this package ships no pre-built workspace and no
-`hedgehog-core-design`-style architecture pass: the repo's stack, layout,
-and commands are already decided, so this core wraps them rather than
-choosing anything.
+Rewriting an existing project just to get AI-guided structure isn't
+realistic. Most of the time, you need the discipline applied to what
+you're changing next — not a migration of everything you already built.
 
-## Contents
+This core does exactly that: it reads your repo, respects what's
+already there, and enforces Hedgehog's build discipline on new work
+only.
 
-- `agents/layer-eng.md` — builds each layer of an adopted core's change
-  chain, one `hedgehog claim`ed packet at a time, gated by `hedgehog
-  verify`.
-- `skills/hedgehog-adopt` — brings Hedgehog's discipline to an existing
-  repo: reads the repo read-only, proposes a linear-chain
-  `.hedgehog/core.yaml` whose `verify` commands are the repo's own,
-  confirmed with the user, and writes only `.hedgehog/`. Also the entry
-  point for every later batch of change-work on an already-adopted repo.
-- `skills/hedgehog-adopt-elicit` — a short clarifying pass for a large or
-  under-specified change request on an already-adopted repo, run by
-  `hedgehog-adopt` before adding that intent.
-- `skills/hedgehog-authored-loop` — the operating loop for every unit of
-  change-work on an adopted core: one layer per `hedgehog claim`ed
-  packet via `layer-eng` (`hedgehog next` previews it read-only first),
-  the Correction Protocol, and the per-change Stop Condition, all driven
-  from `.hedgehog/core.yaml`.
-- `CLAUDE.core.md` — fills a Hedgehog project's root `CLAUDE.md`
-  `{{CORE_SECTION}}` placeholder for a repo Hedgehog adopted.
-- `hedgehog-core.yaml` — this package's manifest: name, the selection
-  prose the Hedgehog planner matches a project description against, and
-  which agents/skills/templates it carries.
+```mermaid
+flowchart LR
+    A[Read the repo] --> B[Propose a chain]
+    B --> C[Confirm with you]
+    C --> D[Build one layer at a time]
+    D --> E[Verify with your own commands]
+```
 
-## Using this package
+## What you get
 
-A Hedgehog installation depends on this package for the `adopted` core
-rather than carrying its content directly. See the Hedgehog engine
-(`@skyf0xx/hedgehog`) for the installer and build-graph tooling that
-consumes it. Designing a workspace from scratch for a project that fits
-no shipped core, rather than adopting Hedgehog onto one that already
-exists, is a separate core,
-[`@skyf0xx/hedgehog-core-authored`](https://github.com/skyf0xx/hedgehog-core-authored).
+- **No migration, no rewrite** — your stack, layout, and commands stay
+  exactly as they are.
+- **A build graph for new change only** — existing code is context to
+  respect, never a node to touch uninvited.
+- **Verification using your own tooling** — the checks that gate each
+  layer are the commands your repo already runs.
 
-## Working on this core
+## Built for real, existing projects
 
-This is a versioned npm package that the Hedgehog engine's `init` fetches
-by name, carrying `adopted`'s own agent, skills, and the
-`hedgehog-core.yaml` manifest that names them to the engine. This core
-has no `init` step of its own — adoption's entry point is `hedgehog core
-record-adopted`, which fetches this package and lands its agents/skills
-onto an existing repo, invoked by `hedgehog-adopt` at first adoption. See
-the engine repo ([`skyf0xx/hedgehog`](https://github.com/skyf0xx/hedgehog))
-and its
-[`ARCHITECTURE.md`](https://github.com/skyf0xx/hedgehog/blob/master/ARCHITECTURE.md)
-for how that mechanism works — it lives there, not here.
+Reach for this core the moment you want scope and verify enforcement on
+a codebase that already has real source files — "adopt this repo," "add
+Hedgehog to my existing project," or any request to bring that
+discipline to work you're already doing.
 
-No root `CLAUDE.md` lives in this repo. `CLAUDE.core.md` is a payload
-file: its content is installed into a *consuming project's* generated
-`CLAUDE.md`, filling that project's `{{CORE_SECTION}}` placeholder. A
-plain root `CLAUDE.md` here would auto-load into any coding agent working
-on this package itself, bleeding project-build context into a repo where
-no Hedgehog build ever runs — build guidance for a project using this
-core lives in that project's own generated `CLAUDE.md`, never here.
+## Easy to install and use
 
-Changing this core means editing `agents/layer-eng.md` or one of the
-three skills under `skills/` (`hedgehog-adopt`, `hedgehog-adopt-elicit`,
-`hedgehog-authored-loop`). There is no `workspace/` template and no
-regeneration script here — this core never scaffolds anything, since the
-whole point is that the workspace already exists. A change here is a
-release of this package, not of the engine: bump `package.json`'s
-version, commit, and merge to `main` — this repo's own `publish.yml`
-tags and publishes from there.
+Ask your agent:
+*"Install Hedgehog on this repo"*
+
+<details>
+<summary>For your agent</summary>
+
+```
+npx @skyf0xx/hedgehog init
+```
+
+Hedgehog's planner selects this core automatically when the project
+already has real source files. There's no install flag for it directly
+— adoption reads the existing repo and proposes the chain itself.
+
+Technical details: [ARCHITECTURE.md](ARCHITECTURE.md)
