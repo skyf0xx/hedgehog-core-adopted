@@ -1,14 +1,13 @@
 # Hedgehog Adopted Core ⭐
 
-### Discipline for the Codebase You Already Have
+### Discipline for the Codebase You Have Now
 
-Rewriting an existing project just to get AI-guided structure isn't
-realistic. Most of the time, you need the discipline applied to what
-you're changing next — not a migration of everything you already built.
+Rewriting an existing project to get AI-guided structure isn't
+realistic. What you need is that discipline applied to what you're
+changing next, without touching everything you built before.
 
-This core does exactly that: it reads your repo, respects what's
-already there, and enforces Hedgehog's build discipline on new work
-only.
+This core reads your repo, respects what's there, and enforces
+Hedgehog's build discipline on new work.
 
 ```mermaid
 flowchart LR
@@ -20,19 +19,19 @@ flowchart LR
 
 ## What you get
 
-- **No migration, no rewrite** — your stack, layout, and commands stay
-  exactly as they are.
-- **A build graph for new change only** — existing code is context to
+- **No migration, no rewrite.** Your stack, layout, and commands stay
+  as they are.
+- **A build graph for new change.** Existing code is context to
   respect, never a node to touch uninvited.
-- **Verification using your own tooling** — the checks that gate each
-  layer are the commands your repo already runs.
+- **Verification using your own tooling.** The checks that gate each
+  layer are the commands your repo runs today.
 
-## Built for real, existing projects
+## Built for existing projects
 
 Reach for this core the moment you want scope and verify enforcement on
-a codebase that already has real source files — "adopt this repo," "add
-Hedgehog to my existing project," or any request to bring that
-discipline to work you're already doing.
+a codebase with source files in it: "adopt this repo," "add Hedgehog to
+my existing project," or any request to bring that discipline to work
+you're doing now.
 
 ## Easy to install and use
 
@@ -45,9 +44,5 @@ Ask your agent:
 ```
 npx @skyf0xx/hedgehog init
 ```
-
-Hedgehog's planner selects this core automatically when the project
-already has real source files. There's no install flag for it directly
-— adoption reads the existing repo and proposes the chain itself.
 
 Technical details: [ARCHITECTURE.md](ARCHITECTURE.md)
