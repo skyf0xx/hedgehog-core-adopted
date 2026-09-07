@@ -1,6 +1,6 @@
 # Hedgehog Adopted Core ⭐
 
-### Discipline for the Codebase You Have Now
+### For: Discipline for the Codebase You Have Now
 
 Rewriting an existing project to get AI-guided structure isn't
 realistic. What you need is that discipline applied to what you're
