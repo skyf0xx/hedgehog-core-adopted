@@ -86,13 +86,34 @@ so concurrent execution buys nothing here.
    is a maximum, not a promise; on a linear chain it naturally returns 1
    regardless of `N`. `hedgehog ready` previews the claimable/held-back
    split without claiming anything.
-2. **Dispatch each claimed packet to its own `layer-eng` subagent**,
-   along with the reminder to read `.hedgehog/adoption.md` for what its
-   layer owns.
-3. Each agent **runs the packet's VERIFICATION command on its own work**
-   as a sanity check before reporting back — necessary, not sufficient.
-   Per task, per agent: the agent reports the work as done; it does not
-   move the task and does not commit.
+2. **For each claimed packet, decide inline vs. dispatch, then act.**
+   Default to dispatching to a `layer-eng` subagent, along with the
+   reminder to read `.hedgehog/adoption.md` for what its layer owns.
+   Build or confirm the packet directly instead, with no subagent, only
+   when the packet clears one of these from the packet alone:
+   - **ALLOWED SCOPE** names a small, bounded set of files the
+     orchestrator can read directly without ballooning its own context.
+   - **RELEVANT RULES** make the layer's irrelevance checkable in one
+     read — the change's own rules describe a concern that plainly
+     doesn't touch this layer's area.
+   - The change, once its shape is known, is small and mechanical — a
+     rename, an import fix, a one-line registration — rather than
+     something needing a subagent's isolated, fresh-context judgment.
+
+   Escalate to a full `layer-eng` dispatch mid-layer the moment any of
+   these turns out false — a "quick check" that surfaces real
+   cross-file reasoning, an unclear scope, or a diff bigger than
+   expected. Never lock in "inline" once guessed. Either way, the
+   layer's own VERIFICATION command and ALLOWED SCOPE gate apply
+   identically in step 4 — this choice changes who reads, writes, and
+   checks, never what gets checked before it's accepted. A no-op found
+   inline is still reported per the packet's HONESTY rules, never
+   assumed.
+3. Whoever built the packet — the `layer-eng` agent, or the orchestrator
+   itself when it went inline — **runs the packet's VERIFICATION command
+   on that work** as a sanity check before reporting back — necessary,
+   not sufficient. Per task: the work is reported as done; the task is
+   not moved and nothing is committed yet.
 4. **As each report arrives, verify it — one at a time, serially.** Run
    `hedgehog verify <task-id> --owner <owner>`. It checks the touched
    files against the packet's ALLOWED SCOPE, runs the layer's
