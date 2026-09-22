@@ -1,11 +1,13 @@
 ## This project's core: adopted (brownfield)
 
+<!-- hedgehog:bootstrap-only start -->
 Hedgehog was adopted onto this repo's existing codebase by
-`hedgehog-adopt` rather than building a workspace from scratch. The build
-graph here covers **new change only**, and no task, commit, or artifact
-record in it is ever fabricated for code Hedgehog didn't touch — that's
-absolute. Pre-existing code is context to read and respect, never a node
-in the build graph.
+`hedgehog-adopt` rather than building a workspace from scratch.
+<!-- hedgehog:bootstrap-only end -->
+The build graph here covers **new change only**, and no task, commit, or
+artifact record in it is ever fabricated for code Hedgehog didn't
+touch — that's absolute. Pre-existing code is context to read and
+respect, never a node in the build graph.
 
 - **`.hedgehog/core.yaml`** — a linear chain of change-order layers (no
   module axis), each `verify` command drawn from this repo's own
@@ -55,17 +57,11 @@ they apply here unchanged.
 
 ### The agents — delegate the judgment calls
 
-- **`planner`** — routes new change-work here via `hedgehog intent add`
-  once this repo is under adoption; does not re-run intake or re-decide
-  the core.
-- **`layer-eng`** — builds one layer per `hedgehog claim`ed packet,
-  working from the packet's ALLOWED SCOPE. Reports the work done; never
-  commits it.
-- **`reviewer`** — judges only the unit under change, never pre-existing
-  code the current work didn't touch. A day-one dump of legacy findings
-  is out of scope by design — see `adoption.md`.
-- **`tweaker`** — adjustments to what Hedgehog itself has built under
-  this adoption; not a channel for legacy-code cleanup.
+`layer-eng` builds one layer per `hedgehog claim`ed packet, working from
+the packet's ALLOWED SCOPE; it reports the work done and never commits
+it. See `hedgehog-authored-loop` for the claim/dispatch/verify sequencing,
+and `hedgehog-adopt` for how `planner`, `reviewer`, and `tweaker` route
+work onto this core — that's the source, not restated here.
 
 ## The constants (do not deviate)
 
