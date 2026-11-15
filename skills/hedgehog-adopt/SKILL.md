@@ -271,7 +271,8 @@ Protocol path described there.
   never treated as current past the date it was read."*
 
 Wait for explicit go-ahead. On confirmation, write `.hedgehog/core.yaml`
-(format: the engine's AUTHORING-CORES.md) and `.hedgehog/adoption.md`.
+(format enforced by `hedgehog core check`; field reference:
+https://github.com/skyf0xx/hedgehog/blob/master/AUTHORING-CORES.md) and `.hedgehog/adoption.md`.
 Verify the file before showing it back:
 
 ```bash
