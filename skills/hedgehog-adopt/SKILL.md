@@ -59,9 +59,10 @@ thing a generic agent setup doesn't give you.
 
 ## When this runs
 
-`planner`'s Phase 0 routes here as a fourth outcome, distinct from "which
-shipped core fits" or "author one" — the question here isn't which core
-fits new work, it's that no new workspace is being built at all. Skip
+`planner`'s Phase 0 outcome 4, "An existing repo, ongoing adoption",
+routes here, detected at its Workflow step 2 before Phase 0's matching
+runs. The question isn't which core fits new work, it's that no new
+workspace is being built at all. Skip
 `hedgehog-planning-intake`'s BMAD shelf entirely: BMAD elicits product
 drivers (persistence, deployment target, integration surface) that are
 already settled facts of a repo that already exists, not open decisions
@@ -171,10 +172,10 @@ same as Step 2's verify-command candidates, confirmed before anything is
 written, never assumed straight into the chain.
 
 Linear chain is not a simplification made for this skill's convenience —
-it's what sidesteps `core.mjs`'s module-axis uniformity rule
-(`validateCore`, `src/db/core.mjs:603`): a core where any layer's scope
-carries `{module}` requires every non-`exclusive`/non-`once` layer to
-carry one too, which fights any repo not laid out module-per-directory.
+it's what sidesteps the loader's module-axis uniformity rule: a core
+where any layer's scope carries `{module}` requires every
+non-`exclusive`/non-`once` layer to carry one too, which fights any repo
+not laid out module-per-directory.
 Never introduce `{module}` here.
 
 **Always end with a `join`-style tail layer**: `scope: ["**"]`,
@@ -270,59 +271,35 @@ Protocol path described there.
   never treated as current past the date it was read."*
 
 Wait for explicit go-ahead. On confirmation, write `.hedgehog/core.yaml`
-(exact format `src/db/core.mjs` parses — see any shipped core.yaml for
-the shape) and `.hedgehog/adoption.md`. Verify the file loads before
-showing it back:
+(format: the engine's AUTHORING-CORES.md) and `.hedgehog/adoption.md`.
+Verify the file before showing it back:
 
 ```bash
-node -e "import('<path-to-hedgehog-install>/src/db/core.mjs').then(m => m.loadCore('.hedgehog/core.yaml')).then(c => console.log(JSON.stringify(c, null, 2)))"
+hedgehog core check .hedgehog/core.yaml
 ```
 
-Nothing else gets written at adoption time beyond root `CLAUDE.md`'s
+It exits 1 on a file that does not load and prints lint warnings
+otherwise; `hedgehog core show` prints the layers as resolved.
+
+Nothing else gets written at adoption time beyond the instructions-file
 Hedgehog section and the adopted-core record below. No working code, no
 `package.json` edits, no formatter run, no root `CLAUDE.md` project
 placeholders — `{{PROJECT_NAME}}`/`{{PROJECT_SUMMARY}}` describe a
 project Hedgehog is building, and adoption isn't building one, so leave
 them alone.
 
-Record the adoption first, so this core's own files — including
-`CLAUDE.core.md`, the section merged into root `CLAUDE.md` below — are
-actually on disk to read: `npx @skyf0xx/hedgehog core record-adopted` (or
-the locally installed `hedgehog` binary), once, right here at first
-adoption. It fetches the `adopted` package, lands `layer-eng` and every
-skill this manifest names alongside a local copy of `CLAUDE.core.md` at
-`.hedgehog/CLAUDE.core.md`, and marks the project's core record `adopted`
-so `hedgehog update` refreshes this core's own agents and skills instead
-of silently deleting them (they were never installed by a normal `init`,
-since adoption's `init` names no core). Idempotent — safe to re-run, but
-there is no need to on a later "Adding the first (or next) change-work"
-pass, since nothing about the recorded core changes between those runs.
-
-Then merge `.hedgehog/CLAUDE.core.md`'s content into root `CLAUDE.md` via
-`<path-to-hedgehog-install>/src/hosts/claude-md-merge.mjs`, never a raw
-`{{CORE_SECTION}}` string replace — an adopted repo's root `CLAUDE.md`
-almost always predates Hedgehog and has no such placeholder, since `init`
-never touched this repo before now:
-
-```bash
-node -e "
-import('<path-to-hedgehog-install>/src/hosts/claude-md-merge.mjs').then(async (m) => {
-  const fs = await import('node:fs/promises');
-  const existing = await fs.readFile('CLAUDE.md', 'utf8').catch(() => null);
-  const section = await fs.readFile('.hedgehog/CLAUDE.core.md', 'utf8');
-  if (existing === null) return; // no root CLAUDE.md — nothing to merge into
-  const out = m.hasCoreSection(existing) && existing.includes('{{CORE_SECTION}}')
-    ? existing.replaceAll('{{CORE_SECTION}}', m.wrapSection(section))
-    : m.appendCoreSection(existing, section);
-  await fs.writeFile('CLAUDE.md', out);
-});
-"
-```
-
-If root `CLAUDE.md` doesn't exist at all, there is nothing to merge
-into — leave it absent rather than generating one; adoption never
-originates a project's root instructions file, only extends one that's
-already there.
+Record the adoption once, right here at first adoption:
+`npx @skyf0xx/hedgehog core record-adopted` (or the locally installed
+`hedgehog` binary). It fetches the `adopted` package, lands `layer-eng`
+and every skill this manifest names, keeps a local copy of
+`CLAUDE.core.md` at `.hedgehog/CLAUDE.core.md`, and merges that section
+into every host's existing instructions file (a hand-written root
+`CLAUDE.md` included), never creating one that is absent: adoption only
+extends the instructions file a repo already has. It marks the project's
+core record `adopted` so `hedgehog update` refreshes this core's own
+agents and skills instead of silently deleting them (adoption's `init`
+names no core). Idempotent, and a later "Adding the first (or next)
+change-work" pass has no need to re-run it.
 
 ## Adding the first (or next) change-work
 
@@ -447,9 +424,9 @@ could be misread as a percentage of the whole.
 - **Never touch working code, at adoption time or ever, as this skill.**
   The only writes this skill makes are `.hedgehog/core.yaml`,
   `.hedgehog/adoption.md` (Step 4's rationale and its "Repo shape"
-  section), root `CLAUDE.md`'s Hedgehog section via `claude-md-merge.mjs`
-  and the adopted-core record via `hedgehog core record-adopted` (both
-  first run only), and the build graph via `hedgehog intent add`/
+  section), the instructions-file Hedgehog section and the adopted-core
+  record, both via `hedgehog core record-adopted` (first run only), and
+  the build graph via `hedgehog intent add`/
   `hedgehog plan`.
   `hedgehog-adopt-elicit`'s clarifying pass writes nothing of its own —
   its output only ever becomes `--goal`/`--outcome` text on an
